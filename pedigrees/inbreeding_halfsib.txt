@@ -1,0 +1,7 @@
+id, mother, father, sex
+1, NA, NA, M
+2, NA, NA, F
+3, NA, NA, M
+4, 2, 1, M
+5, 2, 3, F
+6, 5, 4, F
