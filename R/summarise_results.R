@@ -105,6 +105,14 @@ plot_segment_sharing <- qplot(x = l * 100, y = n_shared_segments, group = rep, g
   ylab("Shared segments") +
   ggtitle("Number of shared segments between close relatives")
 
+dir.create("figures")
+
+pdf("figures/number_of_shared_segments.pdf",
+    height = 4,
+    width = 8)
+print(plot_segment_sharing)
+dev.off()
+
 
 
 ## Make a stats table of the number of shared segments
