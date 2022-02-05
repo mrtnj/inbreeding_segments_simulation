@@ -1,0 +1,4 @@
+case,inbred_self_sharing,parent_sharing
+full-sib,0.25 (0.052),0.5 (0.041)
+half-sib,0.13 (0.038),0.25 (0.029)
+cousin,0.064 (0.027),0.13 (0.022)
