@@ -2,6 +2,7 @@
 library(dplyr)
 library(ggplot2)
 library(purrr)
+library(tidyr)
 
 
 ## Read simulation results
@@ -80,6 +81,19 @@ get_segment_counts <- function(sim) {
   segment_counts
 }
 
+
+## Get mean length of shared segments
+
+get_mean_segment_lengths <- function(sim) {
+  
+  map_dbl(sim, function(s) {
+    mean(s$shared_segments_parents$segment_length)
+  })
+  
+}
+
+
+
 counts <- rbind(transform(get_segment_counts(sim_fullsib),
                           case = "full-sib"),
                 transform(get_segment_counts(sim_halfsib),
@@ -138,5 +152,34 @@ pretty_table <- pretty_table[match(c("full-sib", "half-sib", "cousin"), pretty_t
 
 write.csv(pretty_table,
           file = "tables/mean_segment_count.csv",
+          row.names = FALSE,
+          quote = FALSE)
+
+
+
+## Make a stats table of shared segment length
+
+segment_lengths_fullsib <- get_mean_segment_lengths(sim_fullsib)
+segment_lengths_halfsib <- get_mean_segment_lengths(sim_halfsib)
+segment_lengths_cousin <- get_mean_segment_lengths(sim_cousin)
+
+length_stats <- tibble(case = c("full-sib", "half-sib", "cousin"),
+                       mean_length = map_dbl(list(segment_lengths_fullsib,
+                                                  segment_lengths_halfsib,
+                                                  segment_lengths_cousin),
+                                             mean),
+                       sd_length = map_dbl(list(segment_lengths_fullsib,
+                                                segment_lengths_halfsib,
+                                                segment_lengths_cousin),
+                                           sd))
+
+length_stats$mean_length_sd <- paste(signif(length_stats$mean_length, 2),
+                                     " (",
+                                     signif(length_stats$sd_length, 2),
+                                     ")",
+                                     sep = "")
+
+write.csv(length_stats,
+          file = "tables/mean_segment_length.csv",
           row.names = FALSE,
           quote = FALSE)
